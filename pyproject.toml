@@ -1,0 +1,87 @@
+[build-system]
+requires = ["uv_build>=0.10.12,<0.11"]
+build-backend = "uv_build"
+
+[project]
+name = "yukilog"
+version = "1.0.0"
+description = "A small, explicit logging facade for Liteyuki projects"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.14"
+authors = [
+    { name = "LiteyukiStudio" },
+]
+keywords = ["logging", "loguru", "liteyuki"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
+]
+dependencies = [
+    "loguru>=0.7.3,<0.8",
+]
+
+[project.urls]
+Homepage = "https://github.com/LiteyukiStudio/yukilog"
+Repository = "https://github.com/LiteyukiStudio/yukilog"
+Issues = "https://github.com/LiteyukiStudio/yukilog/issues"
+
+[dependency-groups]
+dev = [
+    "mypy==1.20.1",
+    "pytest>=9,<10",
+    "pytest-cov>=7,<8",
+    "ruff>=0.16,<0.17",
+]
+
+[tool.uv]
+default-groups = ["dev"]
+environments = ["python_version == '3.14'"]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "A",
+    "ANN",
+    "ASYNC",
+    "B",
+    "C4",
+    "E",
+    "F",
+    "I",
+    "LOG",
+    "PERF",
+    "PIE",
+    "PTH",
+    "RUF",
+    "SIM",
+    "UP",
+    "W",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["ANN401"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+files = ["src", "tests"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-config --strict-markers --cov=yukilog --cov-report=term-missing"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["yukilog"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
