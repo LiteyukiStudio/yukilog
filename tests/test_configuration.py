@@ -110,6 +110,20 @@ def test_child_runtime_decoder_rejects_unmarked_lines(line: str) -> None:
     assert decode_child_runtime_line(line) is None
 
 
+def test_child_runtime_decoder_preserves_unknown_top_level_fields() -> None:
+    payload = {
+        "_yukilog": CHILD_RUNTIME_LOG_MARKER,
+        "message": "future field",
+        "unknown": {"version": 2},
+    }
+
+    decoded = decode_child_runtime_line(json.dumps(payload))
+
+    assert decoded == payload
+    assert decoded is not None
+    assert decoded["unknown"] == {"version": 2}
+
+
 def test_file_sink_writes_and_flushes(tmp_path: Path) -> None:
     path = tmp_path / "logs" / "app.log"
     configure(
