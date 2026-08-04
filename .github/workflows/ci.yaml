@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v8
+        with:
+          version: "0.11.16"
+          enable-cache: true
+      - name: Install and validate
+        run: |
+          uv python install 3.14
+          uv sync --locked
+          uv run ruff check .
+          uv run mypy
+          uv run pytest
+          uv build
